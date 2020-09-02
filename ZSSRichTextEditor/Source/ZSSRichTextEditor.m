@@ -259,7 +259,7 @@ static CGFloat kDefaultScale = 0.5;
     self.enabledToolbarItems = [[NSArray alloc] init];
     
     //Frame for the source view and editor view
-    CGRect frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    CGRect frame = CGRectZero;
     
     //Source View
     [self createSourceViewWithFrame:frame];
@@ -393,7 +393,10 @@ static CGFloat kDefaultScale = 0.5;
 
     self.editorView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
     self.editorView.scrollView.bounces = YES;
-    self.editorView.backgroundColor = [UIColor whiteColor];
+    self.editorView.opaque = false;
+    self.editorView.clipsToBounds = true;
+    self.editorView.backgroundColor = [UIColor colorWithRed:0.947 green:0.967 blue:0.967 alpha:1];
+    self.editorView.layer.cornerRadius = 24;
     [self.view addSubview:self.editorView];
     
 }
@@ -2235,21 +2238,9 @@ static CGFloat kDefaultScale = 0.5;
             self.toolbarHolder.frame = toolbarFrame;
             
             // Editor View
-            CGRect editorFrame = self.editorView.frame;
-            editorFrame.size.height = toolbarFrame.origin.y - extraHeight;
-            self.editorView.frame = editorFrame;
             self.editorViewFrame = self.editorView.frame;
             self.editorView.scrollView.contentInset = UIEdgeInsetsZero;
             self.editorView.scrollView.scrollIndicatorInsets = UIEdgeInsetsZero;
-            
-            // Source View
-            CGRect sourceFrame = self.sourceView.frame;
-            sourceFrame.size.height = (self.view.frame.size.height - keyboardHeight) - sizeOfToolbar - extraHeight;
-            self.sourceView.frame = sourceFrame;
-            
-            // Provide editor with keyboard height and editor view height
-            [self setFooterHeight:(keyboardHeight - 8)];
-            [self setContentHeight: self.editorViewFrame.size.height];
             
         } completion:nil];
         
@@ -2272,32 +2263,9 @@ static CGFloat kDefaultScale = 0.5;
             self.toolbarHolder.frame = frame;
             
             // Editor View
-            CGRect editorFrame = self.editorView.frame;
-            
-            if (self->_alwaysShowToolbar) {
-                editorFrame.size.height = ((self.view.frame.size.height - sizeOfToolbar) - extraHeight);
-            } else {
-                editorFrame.size.height = self.view.frame.size.height;
-            }
-            
-            self.editorView.frame = editorFrame;
             self.editorViewFrame = self.editorView.frame;
             self.editorView.scrollView.contentInset = UIEdgeInsetsZero;
             self.editorView.scrollView.scrollIndicatorInsets = UIEdgeInsetsZero;
-            
-            // Source View
-            CGRect sourceFrame = self.sourceView.frame;
-            
-            if (self->_alwaysShowToolbar) {
-                sourceFrame.size.height = ((self.view.frame.size.height - sizeOfToolbar) - extraHeight);
-            } else {
-                sourceFrame.size.height = self.view.frame.size.height;
-            }
-            
-            self.sourceView.frame = sourceFrame;
-            
-            [self setFooterHeight:0];
-            [self setContentHeight:self.editorViewFrame.size.height];
             
         } completion:nil];
         
@@ -2379,6 +2347,14 @@ static CGFloat kDefaultScale = 0.5;
             item.enabled = enable;
         }
     }
+}
+
+- (void)updateFrame:(CGRect)frame {
+    self.editorView.frame = frame;
+    self.sourceView.frame = frame;
+    
+    [self setFooterHeight:0];
+    [self setContentHeight: self.editorViewFrame.size.height];
 }
 
 #pragma mark - Memory Warning Section
