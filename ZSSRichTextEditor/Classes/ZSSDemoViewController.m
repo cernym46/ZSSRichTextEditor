@@ -79,27 +79,18 @@
 
 - (void)exportHTML {
     [self getHTML:^(NSString *result, NSError * _Nullable error) {
-        NSLog(@"%@", result);
     }];
 }
 
 - (void)editorDidChangeWithText:(NSString *)text andHTML:(NSString *)html {
     
-    NSLog(@"Text Has Changed: %@", text);
-    
-    NSLog(@"HTML Has Changed: %@", html);
-    
 }
 
 - (void)hashtagRecognizedWithWord:(NSString *)word {
     
-    NSLog(@"Hashtag has been recognized: %@", word);
-    
 }
 
 - (void)mentionRecognizedWithWord:(NSString *)word {
-    
-    NSLog(@"Mention has been recognized: %@", word);
     
 }
 

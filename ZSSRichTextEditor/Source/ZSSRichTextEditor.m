@@ -1106,14 +1106,9 @@ static CGFloat kDefaultScale = 0.5;
     [self.editorView evaluateJavaScript:ZSSEditorHTML completionHandler:^(NSString *result, NSError *error) {
         
         if (error != NULL) {
-            NSLog(@"HTML Parsing Error: %@", error);
         }
         
-        NSLog(@"%@", result);
-     
         NSString *html = [self removeQuotesFromHTML:result];
-        
-        NSLog(@"%@", html);
         
         [self tidyHTML:html completionHandler:^(NSString *result, NSError *error) {
             completionHandler(result, error);
@@ -1138,7 +1133,6 @@ static CGFloat kDefaultScale = 0.5;
     [self.editorView evaluateJavaScript:ZSSEditorText completionHandler:^(NSString *result, NSError *error) {
         
         if (error != NULL) {
-            NSLog(@"Text Parsing Error: %@", error);
         }
         
         
@@ -1527,7 +1521,6 @@ static CGFloat kDefaultScale = 0.5;
             UITextField *title = [alertController.textFields objectAtIndex:1];
             if (!self.selectedLinkURL) {
                 [self insertLink:linkURL.text title:title.text];
-                //NSLog(@"insert link");
             } else {
                 [self updateLink:linkURL.text title:title.text];
             }
@@ -1904,7 +1897,6 @@ static CGFloat kDefaultScale = 0.5;
 
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message {
     NSString *messageString = (NSString *)message.body;
-    NSLog(@"Message received: %@", messageString);
     
     /*
      
@@ -1944,10 +1936,6 @@ static CGFloat kDefaultScale = 0.5;
 
     decisionHandler(WKNavigationActionPolicyAllow);
 
-    NSLog(@"web request");
-    NSLog(@"%@", urlString);
-    NSLog(@"%@", query);
-
     
     if (navigationAction.navigationType == WKNavigationTypeLinkActivated) {
 
@@ -1962,12 +1950,9 @@ static CGFloat kDefaultScale = 0.5;
         
     } else if ([urlString rangeOfString:@"debug://"].location != NSNotFound) {
         
-        NSLog(@"Debug Found");
-        
         // We recieved the callback
         NSString *debug = [urlString stringByReplacingOccurrencesOfString:@"debug://" withString:@""];
         debug = [debug stringByReplacingPercentEscapesUsingEncoding:NSStringEncodingConversionAllowLossy];
-        NSLog(@"%@", debug);
         
     } else if ([urlString rangeOfString:@"scroll://"].location != NSNotFound) {
         
@@ -2011,13 +1996,11 @@ static CGFloat kDefaultScale = 0.5;
     
     [self.editorView evaluateJavaScript:inputListener completionHandler:^(NSString *result, NSError *error) {
         if (error != NULL) {
-            NSLog(@"%@", error);
         }
     }];
     
     [self.editorView evaluateJavaScript:pasteListener completionHandler:^(NSString *result, NSError *error) {
         if (error != NULL) {
-            NSLog(@"%@", error);
         }
     }];
 }
@@ -2295,10 +2278,8 @@ static CGFloat kDefaultScale = 0.5;
         [self.editorView evaluateJavaScript:html completionHandler:^(NSString *result, NSError *error) {
             
             if (error != NULL) {
-                NSLog(@"HTML Tidying Error: %@", error);
             }
             
-            NSLog(@"%@", result);
             
             completionHandler(result, error);
         }];
