@@ -279,6 +279,8 @@ static CGFloat kDefaultScale = 0.5;
     //Parent holding view
     [self createParentHoldingView];
     
+    self.view.backgroundColor = UIColor.whiteColor;
+    
     //Hide Keyboard
     if (![self isIpad]) {
         NSBundle* bundle = [NSBundle bundleForClass:[ZSSRichTextEditor class]];
